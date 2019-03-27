@@ -177,7 +177,7 @@ public class ObjConhecimentos extends javax.swing.JInternalFrame {
         }
 
         try {
-            if (lblCurso.getText() == null) {
+            if (lblCurso.getText().isEmpty()) {
                 dao.save(o);
             } else {
                 ObjConhecimento oc = (ObjConhecimento) cboxEdit.getSelectedItem();

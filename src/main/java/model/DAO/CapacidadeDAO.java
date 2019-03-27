@@ -13,14 +13,22 @@ import model.Entity.Capacidade;
  *
  * @author oem
  */
-public class CapacidadeDAO extends DAO{
-    
+public class CapacidadeDAO extends DAO {
+
     //Lista tudo sobre um classe
     public List<Capacidade> findAll() {
         manager = new ConnectionFactory().getEntityManager();
         List<Capacidade> list = null;
+        
+        list = manager.createQuery("FROM Capacidade ca").getResultList();
+        return list;
+    }
 
-        list = manager.createQuery("FROM Capacidade v").getResultList();
+    //Lista tudo sobre um classe
+    public List<Capacidade> findAllCurso(long id) {
+        manager = new ConnectionFactory().getEntityManager();
+        List<Capacidade> list = null;
+        list = manager.createQuery("FROM Capacidade ca WHERE ca.curso.id = :id").setParameter("id", id).getResultList();
         return list;
     }
     

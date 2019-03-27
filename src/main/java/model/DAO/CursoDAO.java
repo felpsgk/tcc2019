@@ -7,6 +7,7 @@ package model.DAO;
 
 import controller.Connection.ConnectionFactory;
 import java.util.List;
+import model.Entity.Capacidade;
 import model.Entity.Curso;
 
 /**
@@ -23,5 +24,6 @@ public class CursoDAO extends DAO {
         list = manager.createQuery("FROM Curso c").getResultList();
         return list;
     }
-
+    
+    
 }

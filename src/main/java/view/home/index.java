@@ -12,6 +12,7 @@ import view.intelnalFrame.CursoView;
 import view.intelnalFrame.EleCompete;
 import view.intelnalFrame.ObjConhecimentos;
 import view.intelnalFrame.UniCompete;
+import view.intelnalFrame.jTreeSaep;
 
 /**
  *
@@ -45,6 +46,7 @@ public class index extends javax.swing.JFrame {
         miObjConhecimento = new javax.swing.JMenuItem();
         miUnidadeComp = new javax.swing.JMenuItem();
         miElementoComp = new javax.swing.JMenuItem();
+        menuSaep = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 400));
@@ -105,6 +107,14 @@ public class index extends javax.swing.JFrame {
         menuCadastro.add(miElementoComp);
 
         jMenuBar1.add(menuCadastro);
+
+        menuSaep.setText("Matriz SAEP");
+        menuSaep.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                menuSaepMousePressed(evt);
+            }
+        });
+        jMenuBar1.add(menuSaep);
 
         setJMenuBar(jMenuBar1);
 
@@ -184,6 +194,17 @@ public class index extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_miElementoCompActionPerformed
 
+    private void menuSaepMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSaepMousePressed
+        jTreeSaep jtsaep = new jTreeSaep();
+        try {
+            jtsaep = (jTreeSaep) controller.controllerInternal(jtsaep, 5);
+            desktopPane.add(jtsaep);
+
+        } catch (PropertyVetoException ex) {
+            System.err.println("Erro ao abrir matriz saep " + ex);
+        }
+    }//GEN-LAST:event_menuSaepMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -217,6 +238,7 @@ public class index extends javax.swing.JFrame {
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuCadastro;
+    private javax.swing.JMenu menuSaep;
     private javax.swing.JMenuItem miCapacidade;
     private javax.swing.JMenuItem miCurso;
     private javax.swing.JMenuItem miElementoComp;
