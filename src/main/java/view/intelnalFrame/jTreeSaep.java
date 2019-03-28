@@ -9,6 +9,7 @@ import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -16,8 +17,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import model.DAO.CapacidadeDAO;
 import model.DAO.CursoDAO;
+import model.DAO.EleCompetenciasDAO;
+import model.DAO.ObjConhecimentoDAO;
 import model.DAO.UniCompetenciasDAO;
 import model.Entity.Capacidade;
+import model.Entity.ObjConhecimento;
 
 /**
  *
@@ -38,10 +42,12 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     DefaultMutableTreeNode tecnico;
     DefaultMutableTreeNode gestao;
     DefaultMutableTreeNode capacidade;
+    DefaultListModel modelo;
 
     public jTreeSaep() {
         initComponents();
-//        popCbox();
+        //POPULA OS COMBOBOX's
+        popCboxs();
         //CRIA PRIMEIRA PASTA PADRÃO JTREE
         root = new DefaultMutableTreeNode("Curso");
         //METODO QUE ADICIONA OS CURSOS E CAPACIDADES BASICA, TECNICA E GESTAO EM CADA UM
@@ -66,14 +72,20 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     }
 
     //PREENCHE COMBOBOX COM CAPACIDADES DO BANCO
-//    private void popCbox() {
-//        CapacidadeDAO dao = new CapacidadeDAO();
-//
-//        dao.findAll().forEach((ca) -> {
-//            cboxCap.addItem(ca);
-//        });
-//
-//    }
+    private void popCboxs() {
+        EleCompetenciasDAO daoEle = new EleCompetenciasDAO();
+
+        daoEle.findAll().forEach((ec) -> {
+            cboxEleCompetencias.addItem(ec);
+        });
+        ObjConhecimentoDAO daoObj = new ObjConhecimentoDAO();
+
+        daoObj.findAll().forEach((oc) -> {
+            cboxObjConhecimento.addItem(oc);
+        });
+
+    }
+
     private void addCurso() {
         CursoDAO dao = new CursoDAO();
 
@@ -96,7 +108,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             UniCompete = new DefaultMutableTreeNode(u);
 
             curso.add(UniCompete);
-            
+
             basico = new DefaultMutableTreeNode("Básico");
             UniCompete.add(basico);
             tecnico = new DefaultMutableTreeNode("Técnico");
@@ -158,6 +170,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         btnSalvar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnRemover = new javax.swing.JButton();
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         treeTeste.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -167,22 +180,18 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
         jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        cboxEleCompetencias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         lblEleCompetencias1.setText("Objeto de conhecimento");
 
-        cboxObjConhecimento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        listObjCon.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane2.setViewportView(listObjCon);
 
         lblDesc.setText("Descrição");
 
         btnAddObjCon.setText("Adicionar");
+        btnAddObjCon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddObjConMouseClicked(evt);
+            }
+        });
 
         btnSalvar.setText("Salvar");
 
@@ -198,6 +207,8 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             }
         ));
         jScrollPane3.setViewportView(jTable1);
+
+        btnRemover.setText("Remover");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -227,7 +238,8 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnAddObjCon, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                                    .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnRemover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addComponent(jScrollPane3))
                 .addContainerGap())
         );
@@ -244,16 +256,16 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
                         .addComponent(lblEleCompetencias1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cboxObjConhecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAddObjCon)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnSalvar)
-                                .addGap(15, 15, 15))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                                .addGap(12, 12, 12)
+                                .addComponent(btnRemover)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -269,12 +281,33 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAddObjConMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddObjConMouseClicked
+
+        modelo = new DefaultListModel();
+
+        ObjConhecimento objc = new ObjConhecimento();
+
+        objc = (ObjConhecimento) cboxObjConhecimento.getSelectedItem();
+
+        for (int i = 0; i < listObjCon.getModel().getSize(); i++) {
+            modelo.addElement(listObjCon.getModel().getElementAt(i));
+        }
+        if (modelo.contains(objc)) {
+            JOptionPane.showMessageDialog(null, "Já adicionado!");
+        } else {
+
+            modelo.addElement(objc);
+            listObjCon.setModel(modelo);
+        }
+    }//GEN-LAST:event_btnAddObjConMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddObjCon;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JComboBox<String> cboxEleCompetencias;
-    private javax.swing.JComboBox<String> cboxObjConhecimento;
+    private javax.swing.JComboBox<Object> cboxEleCompetencias;
+    private javax.swing.JComboBox<Object> cboxObjConhecimento;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
