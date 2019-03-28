@@ -42,6 +42,10 @@ public class InternalController {
                 internal.setTitle("Cadastro dos elementos de competencias");
                 internal.setSize(500, 350);
                 break;
+            case 6:
+                internal.setTitle("Cadastro dos objetos de conhecimento");
+                internal.setSize(560, 470);
+                break;
         }
 
         return internal;

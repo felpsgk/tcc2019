@@ -16,6 +16,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import model.DAO.CapacidadeDAO;
 import model.DAO.CursoDAO;
+import model.DAO.UniCompetenciasDAO;
 import model.Entity.Capacidade;
 
 /**
@@ -32,11 +33,11 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     DefaultMutableTreeNode root;
     DefaultMutableTreeNode curso;
     DefaultMutableTreeNode categoriaCap;
-    DefaultMutableTreeNode capacidade;
+    DefaultMutableTreeNode UniCompete;
     DefaultMutableTreeNode basico;
     DefaultMutableTreeNode tecnico;
     DefaultMutableTreeNode gestao;
-    Capacidade[] cap;
+    DefaultMutableTreeNode capacidade;
 
     public jTreeSaep() {
         initComponents();
@@ -56,8 +57,8 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeTeste.getLastSelectedPathComponent();
-                if (selectedNode.getLevel() == 2) {
-                    lblTeste.setText(selectedNode.getUserObject().toString());
+                if (selectedNode.getLevel() == 4) {
+                    lblEleCompetencias.setText(selectedNode.getUserObject().toString());
                 }
             }
         });
@@ -80,14 +81,31 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
             curso = new DefaultMutableTreeNode(c.toString());
             root.add(curso);
-            basico = new DefaultMutableTreeNode("Básico");
-            curso.add(basico);
-            tecnico = new DefaultMutableTreeNode("Técnico");
-            curso.add(tecnico);
-            gestao = new DefaultMutableTreeNode("Gestão");
-            curso.add(gestao);
+            addUniCompete(c.getId());
+
             addCapacidade(c.getId());
         });
+    }
+
+    private void addUniCompete(long cursoId) {
+
+        UniCompetenciasDAO dao = new UniCompetenciasDAO();
+
+        dao.findAllCurso(cursoId).forEach((u) -> {
+
+            UniCompete = new DefaultMutableTreeNode(u);
+
+            curso.add(UniCompete);
+            
+            basico = new DefaultMutableTreeNode("Básico");
+            UniCompete.add(basico);
+            tecnico = new DefaultMutableTreeNode("Técnico");
+            UniCompete.add(tecnico);
+            gestao = new DefaultMutableTreeNode("Gestão");
+            UniCompete.add(gestao);
+
+        });
+
     }
 
     private void addCapacidade(long cursoId) {
@@ -96,7 +114,6 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
         dao.findAllCurso(cursoId).forEach((ca) -> {
 
-            System.out.println(cap);
             switch (ca.getTipo()) {
                 case 0:
                     categoriaCap = new DefaultMutableTreeNode(ca);
@@ -125,37 +142,128 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         treeTeste = new javax.swing.JTree();
-        lblTeste = new javax.swing.JLabel();
+        lblEleCompetencias = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        cboxEleCompetencias = new javax.swing.JComboBox<>();
+        lblEleCompetencias1 = new javax.swing.JLabel();
+        cboxObjConhecimento = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listObjCon = new javax.swing.JList<>();
+        lblDesc = new javax.swing.JLabel();
+        btnAddObjCon = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         treeTeste.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(treeTeste);
 
-        lblTeste.setText("jLabel1");
+        lblEleCompetencias.setText("Elemento de competência");
+
+        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        cboxEleCompetencias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblEleCompetencias1.setText("Objeto de conhecimento");
+
+        cboxObjConhecimento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        listObjCon.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(listObjCon);
+
+        lblDesc.setText("Descrição");
+
+        btnAddObjCon.setText("Adicionar");
+
+        btnSalvar.setText("Salvar");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(lblTeste)
-                .addGap(81, 81, 81))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDesc))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cboxObjConhecimento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cboxEleCompetencias, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblEleCompetencias)
+                                    .addComponent(lblEleCompetencias1))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnAddObjCon, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                                    .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addComponent(jScrollPane3))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblEleCompetencias)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cboxEleCompetencias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblEleCompetencias1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cboxObjConhecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAddObjCon)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSalvar)
+                                .addGap(15, 15, 15))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDesc))
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(lblTeste)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -163,8 +271,21 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddObjCon;
+    private javax.swing.JButton btnSalvar;
+    private javax.swing.JComboBox<String> cboxEleCompetencias;
+    private javax.swing.JComboBox<String> cboxObjConhecimento;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblTeste;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblDesc;
+    private javax.swing.JLabel lblEleCompetencias;
+    private javax.swing.JLabel lblEleCompetencias1;
+    private javax.swing.JList<String> listObjCon;
     private javax.swing.JTree treeTeste;
     // End of variables declaration//GEN-END:variables
 }

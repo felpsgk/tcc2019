@@ -197,7 +197,7 @@ public class index extends javax.swing.JFrame {
     private void menuSaepMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSaepMousePressed
         jTreeSaep jtsaep = new jTreeSaep();
         try {
-            jtsaep = (jTreeSaep) controller.controllerInternal(jtsaep, 5);
+            jtsaep = (jTreeSaep) controller.controllerInternal(jtsaep, 6);
             desktopPane.add(jtsaep);
 
         } catch (PropertyVetoException ex) {
