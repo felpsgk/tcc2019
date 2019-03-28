@@ -64,7 +64,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeTeste.getLastSelectedPathComponent();
                 if (selectedNode.getLevel() == 4) {
-                    lblEleCompetencias.setText(selectedNode.getUserObject().toString());
+                    
                 }
             }
         });
