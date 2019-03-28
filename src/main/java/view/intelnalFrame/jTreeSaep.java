@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import model.DAO.CapacidadeDAO;
@@ -47,6 +49,19 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         dft = new DefaultTreeModel(root);
         //DA PARA A JTREE O MODELO SETADO
         treeTeste.setModel(dft);
+
+        //EVENTO DE CLIQUE NA TREE APENAS NO NÍVEL DESEJADO
+        treeTeste.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
+
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeTeste.getLastSelectedPathComponent();
+                if (selectedNode.getLevel() == 2) {
+                    lblTeste.setText(selectedNode.getUserObject().toString());
+                }
+            }
+        });
+
     }
 
     //PREENCHE COMBOBOX COM CAPACIDADES DO BANCO
@@ -112,15 +127,13 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         treeTeste = new javax.swing.JTree();
+        lblTeste = new javax.swing.JLabel();
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         treeTeste.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        treeTeste.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                treeTesteMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(treeTeste);
+
+        lblTeste.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,34 +142,29 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
-                .addGap(133, 133, 133))
+                .addGap(18, 18, 18)
+                .addComponent(lblTeste)
+                .addGap(81, 81, 81))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(lblTeste)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void treeTesteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_treeTesteMouseClicked
-        try {
-            DefaultMutableTreeNode capSelec = (DefaultMutableTreeNode) treeTeste.getLastSelectedPathComponent();
-
-            if (capSelec.getLevel() == 3) {
-                System.out.println();
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-    }//GEN-LAST:event_treeTesteMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTeste;
     private javax.swing.JTree treeTeste;
     // End of variables declaration//GEN-END:variables
 }
