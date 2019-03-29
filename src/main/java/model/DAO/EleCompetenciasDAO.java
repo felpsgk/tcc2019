@@ -21,4 +21,20 @@ public class EleCompetenciasDAO extends DAO{
         list = manager.createQuery("FROM EleCompetencias e").getResultList();
         return list;
     }
+
+    public List<EleCompetencias> findAllUni(long id) {
+        manager = new ConnectionFactory().getEntityManager();
+        List<EleCompetencias> list = null;
+        list = manager.createQuery("FROM EleCompetencias e WHERE e.uniCopetencias.id = :id")
+                .setParameter("id", id).getResultList();
+        return list;
+    }
+    
+    public EleCompetencias findOne(String desc) {
+        manager = new ConnectionFactory().getEntityManager();
+        EleCompetencias uc = null;
+        uc = (EleCompetencias) manager.createQuery("FROM EleCompetencias e WHERE e.descricao = :descricao")
+                .setParameter("descricao", desc).getSingleResult();
+        return uc;
+    }
 }

@@ -17,7 +17,9 @@ import model.DAO.EleCompetenciasDAO;
 import model.DAO.ObjConhecimentoDAO;
 import model.DAO.UniCompetenciasDAO;
 import model.Entity.Curso;
+import model.Entity.EleCompetencias;
 import model.Entity.ObjConhecimento;
+import model.Entity.UniCopetencias;
 
 /**
  *
@@ -33,17 +35,19 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     DefaultMutableTreeNode root;
     DefaultMutableTreeNode categoriaCap;
     DefaultMutableTreeNode UniCompete;
+    DefaultMutableTreeNode EleCompete;
     DefaultMutableTreeNode basico;
     DefaultMutableTreeNode tecnico;
     DefaultMutableTreeNode gestao;
     DefaultMutableTreeNode capacidade;
     DefaultListModel modelo;
     UniCompetenciasDAO daoUni;
+    EleCompetenciasDAO daoEle;
 
     public jTreeSaep(Curso c) {
         initComponents();
         //METODO QUE ADICIONA OS CURSOS E CAPACIDADES BASICA, TECNICA E GESTAO EM CADA UM
-        addCurso(c);
+        addCompetencias(c);
         //POPULA OS COMBOBOX's
         popCboxs();
         //SETA O MODELO ATE AQUI CRIADO
@@ -58,24 +62,25 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             public void valueChanged(TreeSelectionEvent e) {
                 daoUni = new UniCompetenciasDAO();
                 daoUni.findAllCurso(c.getId());
-                
+
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeTeste.getLastSelectedPathComponent();
-                
+
                 if (selectedNode.getLevel() == 0) {
-                    
+
                     //curso
                     lblDesc.setText(c.getDescricao());
 
                 } else if (selectedNode.getLevel() == 1) {
-
+                    UniCopetencias uc;
                     //unidade de competencia
-                    daoUni.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
-                    
+                    uc = daoUni.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
+                    lblDesc.setText(uc.getDescricao());
 
                 } else if (selectedNode.getLevel() == 0) {
-
+                    EleCompetencias ec;
                     //elemento de competencia
-                    lblDesc.setText(c.getDescricao());
+                    ec = daoEle.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
+                    lblDesc.setText(ec.getDescricao());
 
                 } else if (selectedNode.getLevel() == 0) {
 
@@ -89,24 +94,35 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
     }
 
-    private void addCurso(Curso c) {
+    private void addCompetencias(Curso c) {
         //CRIA PRIMEIRA PASTA PADRÃO JTREE
         root = new DefaultMutableTreeNode(c.getNome());
-        daoUni = new UniCompetenciasDAO();
-        daoUni.findAllCurso(c.getId()).forEach((u) -> {
 
-            UniCompete = new DefaultMutableTreeNode(u);
+        daoUni = new UniCompetenciasDAO();
+        daoEle = new EleCompetenciasDAO();
+
+        daoUni.findAllCurso(c.getId()).forEach((uc) -> {
+
+            UniCompete = new DefaultMutableTreeNode(uc);
 
             root.add(UniCompete);
 
-            basico = new DefaultMutableTreeNode("Básico");
-            UniCompete.add(basico);
-            tecnico = new DefaultMutableTreeNode("Técnico");
-            UniCompete.add(tecnico);
-            gestao = new DefaultMutableTreeNode("Gestão");
-            UniCompete.add(gestao);
+            daoEle.findAllUni(uc.getId()).forEach((ec) -> {
 
-            addCapacidade(c.getId());
+                EleCompete = new DefaultMutableTreeNode(ec);
+
+                UniCompete.add(EleCompete);
+
+                basico = new DefaultMutableTreeNode("Básico");
+                EleCompete.add(basico);
+                tecnico = new DefaultMutableTreeNode("Técnico");
+                EleCompete.add(tecnico);
+                gestao = new DefaultMutableTreeNode("Gestão");
+                EleCompete.add(gestao);
+
+                addCapacidade(c.getId());
+
+            });
 
         });
     }
