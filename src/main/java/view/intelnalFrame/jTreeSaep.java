@@ -5,10 +5,6 @@
  */
 package view.intelnalFrame;
 
-import java.awt.Event;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.TreeSelectionEvent;
@@ -20,7 +16,7 @@ import model.DAO.CursoDAO;
 import model.DAO.EleCompetenciasDAO;
 import model.DAO.ObjConhecimentoDAO;
 import model.DAO.UniCompetenciasDAO;
-import model.Entity.Capacidade;
+import model.Entity.Curso;
 import model.Entity.ObjConhecimento;
 
 /**
@@ -35,7 +31,6 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     //cria os modelos
     DefaultTreeModel dft;
     DefaultMutableTreeNode root;
-    DefaultMutableTreeNode curso;
     DefaultMutableTreeNode categoriaCap;
     DefaultMutableTreeNode UniCompete;
     DefaultMutableTreeNode basico;
@@ -43,15 +38,14 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     DefaultMutableTreeNode gestao;
     DefaultMutableTreeNode capacidade;
     DefaultListModel modelo;
+    UniCompetenciasDAO daoUni;
 
-    public jTreeSaep() {
+    public jTreeSaep(Curso c) {
         initComponents();
+        //METODO QUE ADICIONA OS CURSOS E CAPACIDADES BASICA, TECNICA E GESTAO EM CADA UM
+        addCurso(c);
         //POPULA OS COMBOBOX's
         popCboxs();
-        //CRIA PRIMEIRA PASTA PADRÃO JTREE
-        root = new DefaultMutableTreeNode("Curso");
-        //METODO QUE ADICIONA OS CURSOS E CAPACIDADES BASICA, TECNICA E GESTAO EM CADA UM
-        addCurso();
         //SETA O MODELO ATE AQUI CRIADO
         dft = new DefaultTreeModel(root);
         //DA PARA A JTREE O MODELO SETADO
@@ -62,52 +56,48 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
             @Override
             public void valueChanged(TreeSelectionEvent e) {
+                daoUni = new UniCompetenciasDAO();
+                daoUni.findAllCurso(c.getId());
+                
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeTeste.getLastSelectedPathComponent();
-                if (selectedNode.getLevel() == 4) {
+                
+                if (selectedNode.getLevel() == 0) {
                     
+                    //curso
+                    lblDesc.setText(c.getDescricao());
+
+                } else if (selectedNode.getLevel() == 1) {
+
+                    //unidade de competencia
+                    daoUni.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
+                    
+
+                } else if (selectedNode.getLevel() == 0) {
+
+                    //elemento de competencia
+                    lblDesc.setText(c.getDescricao());
+
+                } else if (selectedNode.getLevel() == 0) {
+
+                    //capacidade
+                    lblDesc.setText(c.getDescricao());
+
                 }
+
             }
         });
 
     }
 
-    //PREENCHE COMBOBOX COM CAPACIDADES DO BANCO
-    private void popCboxs() {
-        EleCompetenciasDAO daoEle = new EleCompetenciasDAO();
-
-        daoEle.findAll().forEach((ec) -> {
-            cboxEleCompetencias.addItem(ec);
-        });
-        ObjConhecimentoDAO daoObj = new ObjConhecimentoDAO();
-
-        daoObj.findAll().forEach((oc) -> {
-            cboxObjConhecimento.addItem(oc);
-        });
-
-    }
-
-    private void addCurso() {
-        CursoDAO dao = new CursoDAO();
-
-        dao.findAll().forEach((c) -> {
-
-            curso = new DefaultMutableTreeNode(c.toString());
-            root.add(curso);
-            addUniCompete(c.getId());
-
-            addCapacidade(c.getId());
-        });
-    }
-
-    private void addUniCompete(long cursoId) {
-
-        UniCompetenciasDAO dao = new UniCompetenciasDAO();
-
-        dao.findAllCurso(cursoId).forEach((u) -> {
+    private void addCurso(Curso c) {
+        //CRIA PRIMEIRA PASTA PADRÃO JTREE
+        root = new DefaultMutableTreeNode(c.getNome());
+        daoUni = new UniCompetenciasDAO();
+        daoUni.findAllCurso(c.getId()).forEach((u) -> {
 
             UniCompete = new DefaultMutableTreeNode(u);
 
-            curso.add(UniCompete);
+            root.add(UniCompete);
 
             basico = new DefaultMutableTreeNode("Básico");
             UniCompete.add(basico);
@@ -116,8 +106,9 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             gestao = new DefaultMutableTreeNode("Gestão");
             UniCompete.add(gestao);
 
-        });
+            addCapacidade(c.getId());
 
+        });
     }
 
     private void addCapacidade(long cursoId) {
@@ -143,6 +134,21 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
                     break;
             }
         });
+    }
+
+    //PREENCHE COMBOBOX COM CAPACIDADES DO BANCO
+    private void popCboxs() {
+        EleCompetenciasDAO daoEle = new EleCompetenciasDAO();
+
+        daoEle.findAll().forEach((ec) -> {
+            cboxEleCompetencias.addItem(ec);
+        });
+        ObjConhecimentoDAO daoObj = new ObjConhecimentoDAO();
+
+        daoObj.findAll().forEach((oc) -> {
+            cboxObjConhecimento.addItem(oc);
+        });
+
     }
 
     /**

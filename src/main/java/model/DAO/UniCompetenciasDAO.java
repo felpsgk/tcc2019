@@ -28,4 +28,11 @@ public class UniCompetenciasDAO extends DAO{
         list = manager.createQuery("FROM UniCopetencias u WHERE u.curso.id = :id").setParameter("id", id).getResultList();
         return list;
     }
+    public UniCopetencias findOne(String desc) {
+        manager = new ConnectionFactory().getEntityManager();
+        UniCopetencias uc = null;
+        uc = (UniCopetencias) manager.createQuery("FROM UniCopetencias u WHERE u.descricao = :descricao")
+                .setParameter("descricao", desc).getSingleResult();
+        return uc;
+    }
 }

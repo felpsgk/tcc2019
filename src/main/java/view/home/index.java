@@ -7,6 +7,9 @@ package view.home;
 
 import controller.InternalFrameController.InternalController;
 import java.beans.PropertyVetoException;
+import javax.swing.JOptionPane;
+import model.DAO.CursoDAO;
+import model.Entity.Curso;
 import view.intelnalFrame.Capacidades;
 import view.intelnalFrame.CursoView;
 import view.intelnalFrame.EleCompete;
@@ -27,6 +30,17 @@ public class index extends javax.swing.JFrame {
      */
     public index() {
         initComponents();
+        popCboxs();
+        switchCurso.setLocationRelativeTo(this);
+    }
+    
+    private void popCboxs() {
+        CursoDAO dao = new CursoDAO();
+
+        dao.findAll().forEach((c) -> {
+            cboxCursos.addItem(c);
+        });
+
     }
 
     /**
@@ -38,6 +52,10 @@ public class index extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        switchCurso = new javax.swing.JDialog();
+        btnConfirmar = new javax.swing.JButton();
+        cboxCursos = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
         desktopPane = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuCadastro = new javax.swing.JMenu();
@@ -47,6 +65,48 @@ public class index extends javax.swing.JFrame {
         miUnidadeComp = new javax.swing.JMenuItem();
         miElementoComp = new javax.swing.JMenuItem();
         menuSaep = new javax.swing.JMenu();
+
+        switchCurso.setMaximumSize(new java.awt.Dimension(440, 120));
+        switchCurso.setMinimumSize(new java.awt.Dimension(440, 120));
+        switchCurso.setPreferredSize(new java.awt.Dimension(440, 120));
+        switchCurso.setSize(new java.awt.Dimension(440, 120));
+
+        btnConfirmar.setText("Confirmar");
+        btnConfirmar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnConfirmarMouseClicked(evt);
+            }
+        });
+
+        jLabel1.setText("Escolha um curso");
+
+        javax.swing.GroupLayout switchCursoLayout = new javax.swing.GroupLayout(switchCurso.getContentPane());
+        switchCurso.getContentPane().setLayout(switchCursoLayout);
+        switchCursoLayout.setHorizontalGroup(
+            switchCursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(switchCursoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(switchCursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(switchCursoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnConfirmar))
+                    .addComponent(cboxCursos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(switchCursoLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 322, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        switchCursoLayout.setVerticalGroup(
+            switchCursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, switchCursoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboxCursos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnConfirmar)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 400));
@@ -195,15 +255,25 @@ public class index extends javax.swing.JFrame {
     }//GEN-LAST:event_miElementoCompActionPerformed
 
     private void menuSaepMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSaepMousePressed
-        jTreeSaep jtsaep = new jTreeSaep();
+        switchCurso.setTitle("Escolha de curso");
+        switchCurso.setVisible(true);
+    }//GEN-LAST:event_menuSaepMousePressed
+
+    private void btnConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConfirmarMouseClicked
+        
+        Curso curso = new Curso();
+        
+        curso = (Curso) cboxCursos.getSelectedItem();
+                
+        jTreeSaep jtsaep = new jTreeSaep(curso);
         try {
             jtsaep = (jTreeSaep) controller.controllerInternal(jtsaep, 6);
             desktopPane.add(jtsaep);
-
+            switchCurso.dispose();
         } catch (PropertyVetoException ex) {
             System.err.println("Erro ao abrir matriz saep " + ex);
         }
-    }//GEN-LAST:event_menuSaepMousePressed
+    }//GEN-LAST:event_btnConfirmarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -235,7 +305,10 @@ public class index extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnConfirmar;
+    private javax.swing.JComboBox<Object> cboxCursos;
     private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenu menuSaep;
@@ -244,5 +317,6 @@ public class index extends javax.swing.JFrame {
     private javax.swing.JMenuItem miElementoComp;
     private javax.swing.JMenuItem miObjConhecimento;
     private javax.swing.JMenuItem miUnidadeComp;
+    private javax.swing.JDialog switchCurso;
     // End of variables declaration//GEN-END:variables
 }
