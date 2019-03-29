@@ -31,5 +31,13 @@ public class CapacidadeDAO extends DAO {
         list = manager.createQuery("FROM Capacidade ca WHERE ca.curso.id = :id").setParameter("id", id).getResultList();
         return list;
     }
+
+    public Capacidade findOne(String desc) {
+        manager = new ConnectionFactory().getEntityManager();
+        Capacidade cap = null;
+        cap = (Capacidade) manager.createQuery("FROM Capacidade ca WHERE ca.descricao = :descricao")
+                .setParameter("descricao", desc).getSingleResult();
+        return cap;
+    }
     
 }

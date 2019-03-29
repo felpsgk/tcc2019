@@ -16,6 +16,7 @@ import model.DAO.CursoDAO;
 import model.DAO.EleCompetenciasDAO;
 import model.DAO.ObjConhecimentoDAO;
 import model.DAO.UniCompetenciasDAO;
+import model.Entity.Capacidade;
 import model.Entity.Curso;
 import model.Entity.EleCompetencias;
 import model.Entity.ObjConhecimento;
@@ -43,6 +44,9 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     DefaultListModel modelo;
     UniCompetenciasDAO daoUni;
     EleCompetenciasDAO daoEle;
+    CapacidadeDAO daoCap;
+    Capacidade cap;
+    EleCompetencias ec;
 
     public jTreeSaep(Curso c) {
         initComponents();
@@ -66,26 +70,39 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treeTeste.getLastSelectedPathComponent();
 
                 if (selectedNode.getLevel() == 0) {
-
-                    //curso
+                    //ESCREVE NO LABEL A DESCRIÇÃO DO CURSO
                     lblDesc.setText(c.getDescricao());
 
                 } else if (selectedNode.getLevel() == 1) {
+                    //ESCREVE NO LABEL A DESCRIÇÃO DA UNIDADE DE COMPETENCIA SELECIONADA E SALVA
+                    //O OBJETO GLOBALMENTE
                     UniCopetencias uc;
-                    //unidade de competencia
                     uc = daoUni.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
                     lblDesc.setText(uc.getDescricao());
 
-                } else if (selectedNode.getLevel() == 0) {
-                    EleCompetencias ec;
-                    //elemento de competencia
+                } else if (selectedNode.getLevel() == 2) {
+                    //ESCREVE NO LABEL A DESCRIÇÃO DO ELEMENTO DE COMPETENCIA SELECIONADO E SALVA
+                    //O OBJETO GLOBALMENTE
                     ec = daoEle.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
                     lblDesc.setText(ec.getDescricao());
 
-                } else if (selectedNode.getLevel() == 0) {
+                } else if (selectedNode.getLevel() == 3) {
+                    //ESCREVE NO LABEL A CATEGORIADE CAPACIDADE SELECIONADA
+                    if (treeTeste.getSelectionPath().getLastPathComponent().toString() == "Básico") {
+                        lblDesc.setText("Capacidades básicas de " + c.getNome());
+                    } else if (treeTeste.getSelectionPath().getLastPathComponent().toString() == "Técnico") {
+                        lblDesc.setText("Capacidades técnicas de " + c.getNome());
+                    } else if (treeTeste.getSelectionPath().getLastPathComponent().toString() == "Gestão") {
+                        lblDesc.setText("Capacidades de gestão de " + c.getNome());
+                    }
 
-                    //capacidade
-                    lblDesc.setText(c.getDescricao());
+                } else if (selectedNode.getLevel() == 4) {
+                    //AÇÃO DAS CAPACIDADES
+                    daoCap = new CapacidadeDAO();
+
+                    cap = daoCap.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
+
+                    lblDesc.setText("" + cap);
 
                 }
 
@@ -95,18 +112,18 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     }
 
     private void addCompetencias(Curso c) {
-        //CRIA PRIMEIRA PASTA PADRÃO JTREE
+        //CRIA PASTA ROOT DO CURSO
         root = new DefaultMutableTreeNode(c.getNome());
 
         daoUni = new UniCompetenciasDAO();
         daoEle = new EleCompetenciasDAO();
-
+        //CRIA PASTAS PARA CADA UNIDADE DE COMPETENCIA
         daoUni.findAllCurso(c.getId()).forEach((uc) -> {
 
             UniCompete = new DefaultMutableTreeNode(uc);
 
             root.add(UniCompete);
-
+            //CRIA PASTAS PARA CADA ELEMENTO DE COMPETENCIA
             daoEle.findAllUni(uc.getId()).forEach((ec) -> {
 
                 EleCompete = new DefaultMutableTreeNode(ec);
@@ -127,6 +144,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         });
     }
 
+    //ADICIONA AS CAPACIDADES EM SUAS CATEGORIAS
     private void addCapacidade(long cursoId) {
 
         CapacidadeDAO dao = new CapacidadeDAO();
@@ -152,7 +170,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         });
     }
 
-    //PREENCHE COMBOBOX COM CAPACIDADES DO BANCO
+    //PREENCHE OS COMBOBOX COM DADOS DO BANCO
     private void popCboxs() {
         EleCompetenciasDAO daoEle = new EleCompetenciasDAO();
 
@@ -216,6 +234,11 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         });
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSalvarMouseClicked(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -302,7 +325,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //METODO QUE ADICIONA OBJ DE CONHECIMENTO NA JLIST
     private void btnAddObjConMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddObjConMouseClicked
 
         modelo = new DefaultListModel();
@@ -322,6 +345,11 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             listObjCon.setModel(modelo);
         }
     }//GEN-LAST:event_btnAddObjConMouseClicked
+    //METODO QUE IRÁ INSERIR DADOS NA TABELA CONFINAL E ATUALIZAR A TABELA DO PROGRAMA
+
+    private void btnSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalvarMouseClicked
+
+    }//GEN-LAST:event_btnSalvarMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
