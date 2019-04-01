@@ -13,8 +13,8 @@ import model.Entity.ObjConhecimento;
  *
  * @author oem
  */
-public class ObjConhecimentoDAO extends DAO{
-    
+public class ObjConhecimentoDAO extends DAO {
+
     public List<ObjConhecimento> findAll() {
         manager = new ConnectionFactory().getEntityManager();
         List<ObjConhecimento> list = null;

@@ -12,7 +12,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import model.DAO.CapacidadeDAO;
-import model.DAO.CursoDAO;
 import model.DAO.EleCompetenciasDAO;
 import model.DAO.ObjConhecimentoDAO;
 import model.DAO.UniCompetenciasDAO;
@@ -21,6 +20,7 @@ import model.Entity.Curso;
 import model.Entity.EleCompetencias;
 import model.Entity.ObjConhecimento;
 import model.Entity.UniCopetencias;
+import table.TabelaPrincipal;
 
 /**
  *
@@ -28,6 +28,8 @@ import model.Entity.UniCopetencias;
  */
 public class jTreeSaep extends javax.swing.JInternalFrame {
 
+    private TabelaPrincipal model = new TabelaPrincipal();
+    
     /**
      * Creates new form jTreeSaep
      */
@@ -50,6 +52,9 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
     public jTreeSaep(Curso c) {
         initComponents();
+        
+        tblDados.setModel(model);
+        
         //METODO QUE ADICIONA OS CURSOS E CAPACIDADES BASICA, TECNICA E GESTAO EM CADA UM
         addCompetencias(c);
         //POPULA OS COMBOBOX's
@@ -209,7 +214,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         btnAddObjCon = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblDados = new javax.swing.JTable();
         btnRemover = new javax.swing.JButton();
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
@@ -232,6 +237,11 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
                 btnAddObjConMouseClicked(evt);
             }
         });
+        btnAddObjCon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddObjConActionPerformed(evt);
+            }
+        });
 
         btnSalvar.setText("Salvar");
         btnSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -240,7 +250,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblDados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -251,7 +261,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(tblDados);
 
         btnRemover.setText("Remover");
 
@@ -351,6 +361,10 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_btnSalvarMouseClicked
 
+    private void btnAddObjConActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddObjConActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddObjConActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddObjCon;
@@ -364,11 +378,11 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblDesc;
     private javax.swing.JLabel lblEleCompetencias;
     private javax.swing.JLabel lblEleCompetencias1;
     private javax.swing.JList<String> listObjCon;
+    private javax.swing.JTable tblDados;
     private javax.swing.JTree treeTeste;
     // End of variables declaration//GEN-END:variables
 }
