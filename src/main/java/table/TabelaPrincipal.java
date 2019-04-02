@@ -97,6 +97,7 @@ public class TabelaPrincipal extends AbstractTableModel {
         dados.clear();
         dao.findAll(c.getId()).forEach((con) -> {
             dados.add(con);
+            fireTableDataChanged();
         });
     }
 

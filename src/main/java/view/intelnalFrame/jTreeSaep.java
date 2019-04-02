@@ -12,10 +12,12 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import model.DAO.CapacidadeDAO;
+import model.DAO.ConFinalDAO;
 import model.DAO.EleCompetenciasDAO;
 import model.DAO.ObjConhecimentoDAO;
 import model.DAO.UniCompetenciasDAO;
 import model.Entity.Capacidade;
+import model.Entity.ConFinal;
 import model.Entity.Curso;
 import model.Entity.EleCompetencias;
 import model.Entity.ObjConhecimento;
@@ -29,7 +31,7 @@ import table.TabelaPrincipal;
 public class jTreeSaep extends javax.swing.JInternalFrame {
 
     private TabelaPrincipal model = new TabelaPrincipal();
-    
+
     /**
      * Creates new form jTreeSaep
      */
@@ -47,15 +49,17 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     UniCompetenciasDAO daoUni;
     EleCompetenciasDAO daoEle;
     CapacidadeDAO daoCap;
-    Capacidade cap;
+    Curso cs;
+    UniCopetencias uc;
     EleCompetencias ec;
+    Capacidade cap;
 
     public jTreeSaep(Curso c) {
         initComponents();
-        
+        cs = c;
         tblDados.setModel(model);
-        model.readJTable(c);
-        
+        model.readJTable(cs);
+
         //METODO QUE ADICIONA OS CURSOS E CAPACIDADES BASICA, TECNICA E GESTAO EM CADA UM
         addCompetencias(c);
         //POPULA OS COMBOBOX's
@@ -82,7 +86,6 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
                 } else if (selectedNode.getLevel() == 1) {
                     //ESCREVE NO LABEL A DESCRIÇÃO DA UNIDADE DE COMPETENCIA SELECIONADA E SALVA
                     //O OBJETO GLOBALMENTE
-                    UniCopetencias uc;
                     uc = daoUni.findOne(treeTeste.getSelectionPath().getLastPathComponent().toString());
                     lblDesc.setText(uc.getDescricao());
 
@@ -356,10 +359,41 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
             listObjCon.setModel(modelo);
         }
     }//GEN-LAST:event_btnAddObjConMouseClicked
-    //METODO QUE IRÁ INSERIR DADOS NA TABELA CONFINAL E ATUALIZAR A TABELA DO PROGRAMA
 
+//METODO QUE IRÁ INSERIR DADOS NA TABELA CONFINAL E ATUALIZAR A TABELA DO PROGRAMA
     private void btnSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalvarMouseClicked
+        UniCopetencias unic = new UniCopetencias();
+        EleCompetencias ec = new EleCompetencias();
+        Capacidade capa = new Capacidade();
+        ObjConhecimento oc = new ObjConhecimento();
 
+        UniCompetenciasDAO udao = new UniCompetenciasDAO();
+        EleCompetenciasDAO edao = new EleCompetenciasDAO();
+        CapacidadeDAO cdao = new CapacidadeDAO();
+        ObjConhecimentoDAO odao = new ObjConhecimentoDAO();
+        ConFinalDAO cfdao = new ConFinalDAO();
+
+        //pega unidade de competecia
+        unic = uc;
+        //pega elemento competencia
+        ec = (EleCompetencias) cboxEleCompetencias.getSelectedItem();
+        //pega capacidade
+        capa = cap;
+        //pega objeto de conhecimento
+        for (int i = 0; i < listObjCon.getModel().getSize(); i++) {
+            oc = (ObjConhecimento) listObjCon.getModel().getElementAt(i);
+            ConFinal cf = new ConFinal();
+
+            //salva tudo
+            cf.setCurso(cs);
+            cf.setUni(unic);
+            cf.setComp(ec);
+            cf.setCapacidade(capa);
+            cf.setObjConhecimento(oc);
+            cfdao.save(cf);
+        }
+        tblDados.setModel(model);
+        model.readJTable(cs);
     }//GEN-LAST:event_btnSalvarMouseClicked
 
     private void btnAddObjConActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddObjConActionPerformed
@@ -382,7 +416,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblDesc;
     private javax.swing.JLabel lblEleCompetencias;
     private javax.swing.JLabel lblEleCompetencias1;
-    private javax.swing.JList<String> listObjCon;
+    private javax.swing.JList<Object> listObjCon;
     private javax.swing.JTable tblDados;
     private javax.swing.JTree treeTeste;
     // End of variables declaration//GEN-END:variables
