@@ -54,6 +54,7 @@ public class jTreeSaep extends javax.swing.JInternalFrame {
         initComponents();
         
         tblDados.setModel(model);
+        model.readJTable(c);
         
         //METODO QUE ADICIONA OS CURSOS E CAPACIDADES BASICA, TECNICA E GESTAO EM CADA UM
         addCompetencias(c);

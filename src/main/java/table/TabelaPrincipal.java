@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import model.DAO.ConFinalDAO;
+import model.Entity.Capacidade;
 import model.Entity.ConFinal;
 import model.Entity.Curso;
 import model.Entity.EleCompetencias;
+import model.Entity.ObjConhecimento;
 import model.Entity.UniCopetencias;
 
 /**
@@ -21,8 +23,7 @@ import model.Entity.UniCopetencias;
 public class TabelaPrincipal extends AbstractTableModel {
 
     List<ConFinal> dados = new ArrayList<>();
-    private final String[] colunas = {"Obj do conhecimento", "Unidade de Competencia",
-        "Elementos de Competencia", "Capacidade"};
+    private final String[] colunas = {"Unidade de Competencia", "Elementos de Competencia", "Capacidade", "Obj do conhecimento"};
 
     @Override
     public String getColumnName(int column) {
@@ -43,13 +44,13 @@ public class TabelaPrincipal extends AbstractTableModel {
     public Object getValueAt(int linha, int coluna) {
         switch (coluna) {
             case 0:
-                return dados.get(linha).getListObj();
-            case 1:
                 return dados.get(linha).getUni();
-            case 2:
+            case 1:
                 return dados.get(linha).getComp();
+            case 2:
+                return dados.get(linha).getCapacidade();
             case 3:
-                return dados.get(linha).getCurso();
+                return dados.get(linha).getObjConhecimento();
             default:
                 return this.dados.get(linha);
         }
@@ -60,16 +61,16 @@ public class TabelaPrincipal extends AbstractTableModel {
 
         switch (coluna) {
             case 0:
-                dados.get(linha).setListObj((String) valor);
-                break;
-            case 1:
                 dados.get(linha).setUni((UniCopetencias) valor);
                 break;
-            case 2:
+            case 1:
                 dados.get(linha).setComp((EleCompetencias) valor);
                 break;
+            case 2:
+                dados.get(linha).setCapacidade((Capacidade) valor);
+                break;
             case 3:
-                dados.get(linha).setCurso((Curso) valor);
+                dados.get(linha).setObjConhecimento((ObjConhecimento) valor);
                 break;
 
         }
@@ -91,10 +92,10 @@ public class TabelaPrincipal extends AbstractTableModel {
         this.fireTableRowsDeleted(linha, linha);
     }
 
-    public void readJTable() {
+    public void readJTable(Curso c) {
         ConFinalDAO dao = new ConFinalDAO();
         dados.clear();
-        dao.findAll().forEach((con) -> {
+        dao.findAll(c.getId()).forEach((con) -> {
             dados.add(con);
         });
     }

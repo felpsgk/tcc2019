@@ -30,13 +30,12 @@ public class index extends javax.swing.JFrame {
      */
     public index() {
         initComponents();
-        popCboxs();
         switchCurso.setLocationRelativeTo(this);
     }
     
-    private void popCboxs() {
+    private void popCbox() {
         CursoDAO dao = new CursoDAO();
-
+        cboxCursos.removeAllItems();
         dao.findAll().forEach((c) -> {
             cboxCursos.addItem(c);
         });
@@ -255,6 +254,7 @@ public class index extends javax.swing.JFrame {
     }//GEN-LAST:event_miElementoCompActionPerformed
 
     private void menuSaepMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSaepMousePressed
+        popCbox();
         switchCurso.setTitle("Escolha de curso");
         switchCurso.setVisible(true);
     }//GEN-LAST:event_menuSaepMousePressed

@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -41,6 +41,17 @@ public class ConFinal implements Serializable {
     @ManyToOne
     private Curso curso = new Curso();
 
+    @ManyToOne
+    private Capacidade capacidade = new Capacidade();
+
+    public Capacidade getCapacidade() {
+        return capacidade;
+    }
+
+    public void setCapacidade(Capacidade capacidade) {
+        this.capacidade = capacidade;
+    }
+    
     public ObjConhecimento getObjConhecimento() {
         return objConhecimento;
     }

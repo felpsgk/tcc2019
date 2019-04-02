@@ -16,14 +16,11 @@ import model.Entity.ConFinal;
 public class ConFinalDAO extends DAO {
 
     //Lista tudo sobre um classe
-    public List<ConFinal> findAll() {
+    public List<ConFinal> findAll(long id) {
         manager = new ConnectionFactory().getEntityManager();
         List<ConFinal> list = null;
-
-        list = manager.createQuery("FROM ConFinal c "
-                + "WHERE c.objConhecimento.id = c.objConhecimento.curso.id"
-                + " AND c.uni.curso.id = c.curso.id"
-                + " AND c.comp.uniCopetencias.curso.id = c.comp.uniCopetencias.id").getResultList();
+        list = manager.createQuery("FROM ConFinal cf "
+                + "WHERE cf.curso.id = curso.id AND curso.id = :id ").setParameter("id", id).getResultList();
         return list;
     }
 
